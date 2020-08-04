@@ -15,13 +15,31 @@
 #include <WiFi.h>
 #include <WiThrottle.h>
 #include "ui.h"
+#include "dtwifi.h"
 
-const std::string ssid = WIFI_SSID;
-const std::string password = WIFI_PASSWORD;
-const std::string host = JMRI_SERVER_ADDRESS;
-const int port = 12090;
-static volatile bool wifi_connected = false;
-
-WiFiClient client;
 WiThrottle wiThrottle;
 
+void setup() {
+  Serial.begin(115200);
+  WiFi.disconnect();
+  WiFi.onEvent(WiFiEvent);
+  WiFi.mode(WIFI_MODE_STA);
+  WiFi.begin(ssid.c_str(), password.c_str());
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void loop() {
+  if (wiThrottle.check()) {
+    if (wiThrottle.clockChanged) { updateFastTimeDisplay(); }
+    if (wiThrottle.protocolVersionChanged) {
+        Serial.print("PROTOCOL VERSION "); Serial.println(wiThrottle.protocolVersion);
+    }
+  }
+}
