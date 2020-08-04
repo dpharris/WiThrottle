@@ -17,7 +17,9 @@
 #include "ui.h"
 #include "dtwifi.h"
 
+static volatile bool wifi_connected = false;
 WiThrottle wiThrottle;
+WiFiClient client;
 
 void setup() {
   Serial.begin(115200);
@@ -33,6 +35,8 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+ 
+  
 }
 
 void loop() {
