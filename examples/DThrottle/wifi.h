@@ -1,4 +1,10 @@
 // wifi.h
+
+const std::string ssid = WIFI_SSID;
+const std::string password = WIFI_PASSWORD;
+const std::string host = JMRI_SERVER_ADDRESS;
+const int port = 12090;
+
 void wifiOnConnect() {
   Serial.println("STA Connected");
   Serial.print("STA IPv4: ");
