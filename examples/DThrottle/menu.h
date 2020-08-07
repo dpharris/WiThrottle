@@ -3,33 +3,37 @@
 bool (Action)(int parm);
 class Menu {
   public:
-    Action cAction;
+    Action cAction;    // selected action, if there is one
     char title[8];
     uint8_t nitems;
     struct {
       String name;
       Action* action;  // actions return true if they need to be called again, false if finished
+      int parm;
     } item[20];
     uint8_t curItem;
     
-    void addItem( String n, Action* a) {
+    void addItem( String n, Action* a, int parm) {
       if(nitems+1 >= mex_items) return false;
       nitems++;
       name[nitems] = n;
       action[nitems] = a;
     }
-    
+    void addItem( String n, Action* a) {
+      addItem( n, a, 0);
+    }
+
     void move(uint8_t n) {
       curItem += n;
-      if( curItem<0 ) curItem += max_items;          // roll
+      if( curItem<0 ) curItem += max_items;          // roll if necessary
       if( curItem>max_items ) curItem -= max_items;
     }
     
-    bool subMenu() {
+    bool subMenu() {   // if current action is active, then exec it
       if( action ) {
         cAction = action[curItem];
-        if( action[curItem]() ) return true;
-        curAction = 0;
+        if( cAction() ) return true; // returning true means it has not completed
+        curAction = 0;               // else deactivate it
       } 
       return false;
     }
@@ -58,6 +62,7 @@ void mainMenu() {
   // display battery
   // display power
   // display loco#
+  curTrain.display()
   // display direction
   // display function status
 }
