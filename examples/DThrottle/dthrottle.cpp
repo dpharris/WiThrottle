@@ -21,6 +21,8 @@ static volatile bool wifi_connected = false;
 WiThrottle wiThrottle;
 WiFiClient client;
 
+Train curTrain = Train(0, 0);
+
 void setup() {
   Serial.begin(115200);
   WiFi.disconnect();
@@ -46,4 +48,5 @@ void loop() {
         Serial.print("PROTOCOL VERSION "); Serial.println(wiThrottle.protocolVersion);
     }
   }
+
 }
